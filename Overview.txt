@@ -1,0 +1,39 @@
+Market Basket Analysis
+-> Unsupervised Learning ( no algo to be trained, no data to be labeled)
+-> Association Rule Learner (e.g : {peanut butter,jam} -> {bread})
+-> No proper way to evaluate performance
+-> Other applications : 
+
+Challenges with transactional data
+->Huge datasets
+->if k items then possible itemsets in the order of ~ 2^k
+->Need a way to filter out meaningless combinations
+->Apriori comes into the picture
+
+Apriori Algorithm
+->works with large transactional databases
+->used for knowledge discovery 
+->Apriori Property : all subsets of a frequent itemset must also be frequent
+
+Statistical measures: Support and Confidence
+-> Support = freq(itemset)/total no. of txns
+-> Confidence(X->Y) = support(X->Y)/support(X)
+
+Apriori Algorithm
+->Consider items - > A,B,C,D,E,F
+->First Scan of DB- get support for all 1-item itemsets
+->Eliminate the non-frequent 1-item itemsets and keep only frequent ones
+  frequent: A,C,D,E
+  no-frequent: B,F
+->Use Apriori property to construct candidates for 2-item itemsets
+candidates: AC,AD,AE,CD,CE,DE
+->Second scan of DB- get support for all 2-item itemsets
+  frequent:AD,AE,CE,DE
+->Candidates for 3-item itemsets: ADE
+->Third Scan of DB- get support for all 3-item itemsets
+ADE- not frequent
+Algo finishes
+
+A DB scan is required for each level, not efficient
+FPGrowth algorithm does only 2 scans of the DB
+    
