@@ -134,7 +134,7 @@ def leave_one_out(X, y):
 
     for li, p in enumerate(lambda_list):
 
-        print('Iteration for lambda = ' + str(p)
+        print('Iteration for lambda = ' + str(p))
 
         misclassification_errors_futures = []
 
