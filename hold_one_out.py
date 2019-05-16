@@ -136,18 +136,14 @@ if __name__ == '__main__':
     train_labels = np.load("/data_competition1_files/train_labels.npy")
     
     
-    #val_features = np.load("/data_competition1_files/val_features.npy")
-    #val_labels = np.load("/data_competition1_files/val_labels.npy")
+    
     train_features_df = pd.DataFrame(train_features)
     train_labels_df = pd.DataFrame(train_labels)
     train_labels_df.columns = ['Labels']
-    #val_features_df = pd.DataFrame(val_features)
-    #val_labels_df = pd.DataFrame(val_labels)
-    #val_labels_df.columns = ['Labels']
+    
     frames = [train_labels_df, train_features_df]
     train = pd.concat(frames, axis=1)
-    #frames1 = [val_labels_df, val_features_df]
-    #val = pd.concat(frames1, axis=1)
+    
     pairs = create_binary_classes(train)
     lambda_error_pair = {}
     for p in pairs:
