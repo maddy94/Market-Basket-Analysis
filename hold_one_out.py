@@ -116,18 +116,15 @@ def hold_out(X_train, y_train, X_test, y_test):
         misclassfication_errors_lambd[lambduh] = error
     return misclassfication_errors_lambd
 
-def create_binary_classes(train, val):
+def create_binary_classes(train):
     pairs_of_classes = []
     for i in range(0, 10):
         for j in range(i + 1, 10):
             d = str(i)
             e = str(j)
             train_d_e = train.loc[(train['Labels'] == i) | (train['Labels'] == j)]
-            val_d_e = val.loc[(val['Labels'] == i) | (val['Labels'] == j)]
             pairs_of_classes.append((train_d_e.drop('Labels', axis=1),
                                      np.where(train_d_e[['Labels']] == i, -1, 1),
-                                     val_d_e.drop('Labels', axis=1),
-                                     np.where(val_d_e[['Labels']] == i, -1, 1),
                                      (i, j)))
 
     return pairs_of_classes
@@ -135,26 +132,29 @@ def create_binary_classes(train, val):
 
 
 if __name__ == '__main__':
-    train_features = np.load("/Users/aditisinghal/Downloads/data_competition1_files/train_features.npy")
-    train_labels = np.load("/Users/aditisinghal/Downloads/data_competition1_files/train_labels.npy")
-    val_features = np.load("/Users/aditisinghal/Downloads/data_competition1_files/val_features.npy")
-    val_labels = np.load("/Users/aditisinghal/Downloads/data_competition1_files/val_labels.npy")
+    train_features = np.load("/data_competition1_files/train_features.npy")
+    train_labels = np.load("/data_competition1_files/train_labels.npy")
+    
+    
+    #val_features = np.load("/data_competition1_files/val_features.npy")
+    #val_labels = np.load("/data_competition1_files/val_labels.npy")
     train_features_df = pd.DataFrame(train_features)
     train_labels_df = pd.DataFrame(train_labels)
     train_labels_df.columns = ['Labels']
-    val_features_df = pd.DataFrame(val_features)
-    val_labels_df = pd.DataFrame(val_labels)
-    val_labels_df.columns = ['Labels']
+    #val_features_df = pd.DataFrame(val_features)
+    #val_labels_df = pd.DataFrame(val_labels)
+    #val_labels_df.columns = ['Labels']
     frames = [train_labels_df, train_features_df]
     train = pd.concat(frames, axis=1)
-    frames1 = [val_labels_df, val_features_df]
-    val = pd.concat(frames1, axis=1)
-    pairs = create_binary_classes(train, val)
+    #frames1 = [val_labels_df, val_features_df]
+    #val = pd.concat(frames1, axis=1)
+    pairs = create_binary_classes(train)
     lambda_error_pair = {}
     for p in pairs:
 
-        X_train, y_train, X_val, y_val, pair_name = p
-        print("Running for pair",pair_name)
+        X_trainval, y_trainval, pair_name = p
+        X_train, y_train, X_val, y_val = train_test_split(X_trainval, y_trainval , test_size=0.20 , random_state=42)
+        print("Choosing pair: ",pair_name)
         misclassfication_errors_lambd = hold_out( X_train.T, y_train, X_val.T, y_val)
         print(misclassfication_errors_lambd)
         lambda_error_pair[pair_name] = misclassfication_errors_lambd
